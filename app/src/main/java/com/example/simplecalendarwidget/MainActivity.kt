@@ -71,25 +71,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateUI(isGranted: Boolean) {
+        val visibility = if (isGranted) View.VISIBLE else View.GONE
+        
         if (isGranted) {
             statusText.text = getString(R.string.permission_granted)
-            grantButton.isEnabled = false
             grantButton.visibility = View.GONE
-            lblCalendars.visibility = View.VISIBLE
-            calendarContainer.visibility = View.VISIBLE
         } else {
             statusText.text = getString(R.string.permission_required)
             grantButton.isEnabled = true
             grantButton.visibility = View.VISIBLE
-            lblCalendars.visibility = View.GONE
-            calendarContainer.visibility = View.GONE
         }
+        
+        lblCalendars.visibility = visibility
+        calendarContainer.visibility = visibility
     }
 
     private fun loadCalendars() {
         calendarContainer.removeAllViews()
-        val prefs = getSharedPreferences("widget_prefs", Context.MODE_PRIVATE)
-        val selectedIds = prefs.getStringSet("selected_calendars", null)
+        val prefs = getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE)
+        val selectedIds = prefs.getStringSet(Constants.PREF_SELECTED_CALENDARS, null)
         
         // If null, it means first run, so select all by default.
         val isFirstRun = selectedIds == null
@@ -110,42 +110,36 @@ class MainActivity : AppCompatActivity() {
                 val id = it.getLong(0).toString()
                 val name = it.getString(1) ?: "Unknown"
                 
-                val checkBox = CheckBox(this)
-                checkBox.text = name
-                checkBox.textSize = 16f
-                checkBox.tag = id // Store ID in tag
-                checkBox.setPadding(0, 16, 0, 16)
-                
-                // If first run, check all. Else check if in set.
-                checkBox.isChecked = if (isFirstRun) true else selectedIds!!.contains(id)
-                
-                checkBox.setOnCheckedChangeListener { _, _ ->
-                    saveSelectionFromUI()
+                val checkBox = CheckBox(this).apply {
+                    text = name
+                    textSize = 16f
+                    tag = id
+                    setPadding(0, 16, 0, 16)
+                    isChecked = if (isFirstRun) true else selectedIds!!.contains(id)
+                    setOnCheckedChangeListener { _, _ -> saveSelectionFromUI() }
                 }
                 
                 calendarContainer.addView(checkBox)
             }
         }
         
-        // If it was first run, immediately save this "All Checked" state so filtering works correctly
         if (isFirstRun && calendarContainer.childCount > 0) {
             saveSelectionFromUI()
         }
     }
 
     private fun saveSelectionFromUI() {
-        val prefs = getSharedPreferences("widget_prefs", Context.MODE_PRIVATE)
+        val prefs = getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE)
         val selectedIds = HashSet<String>()
         
         for (i in 0 until calendarContainer.childCount) {
             val cb = calendarContainer.getChildAt(i) as CheckBox
             if (cb.isChecked) {
-                val id = cb.tag as String
-                selectedIds.add(id)
+                selectedIds.add(cb.tag as String)
             }
         }
         
-        prefs.edit().putStringSet("selected_calendars", selectedIds).apply()
+        prefs.edit().putStringSet(Constants.PREF_SELECTED_CALENDARS, selectedIds).apply()
         sendWidgetRefresh()
     }
 
