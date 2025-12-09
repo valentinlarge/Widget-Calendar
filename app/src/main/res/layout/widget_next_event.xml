@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:padding="16dp">
+
+    <!-- Label "NEXT EVENT" -->
+    <TextView
+        android:id="@+id/lbl_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="NEXT EVENT"
+        android:textSize="10sp"
+        android:letterSpacing="0.1"
+        android:textColor="#BBFFFFFF"
+        android:textStyle="bold" />
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/next_event_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lbl_next"
+        android:layout_marginTop="4dp"
+        android:text="No upcoming events"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:maxLines="2"
+        android:ellipsize="end" />
+
+    <!-- Time Info -->
+    <TextView
+        android:id="@+id/next_event_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/next_event_title"
+        android:layout_marginTop="4dp"
+        android:text="--:--"
+        android:textColor="#4FC3F7"
+        android:textSize="14sp" />
+
+    <!-- COUNTDOWN TIMER (The Magic Component) -->
+    <!-- Uses system native chronometer to tick every second without battery drain -->
+    <Chronometer
+        android:id="@+id/next_event_countdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:countDown="true" />
+
+</RelativeLayout>

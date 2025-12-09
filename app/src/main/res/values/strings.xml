@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Simple Calendar Widget</string>
+    <string name="add_widget_text">Please add the widget to your home screen.</string>
+    <string name="permission_required">Read Calendar permission is required to display events.</string>
+    <string name="permission_granted">Permission granted. You can now add the widget to your home screen.</string>
+    <string name="grant_permission">Grant Permission</string>
+    <string name="no_events">No upcoming events</string>
+</resources>
