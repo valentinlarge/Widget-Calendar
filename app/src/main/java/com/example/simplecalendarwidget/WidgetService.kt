@@ -92,7 +92,10 @@ class CalendarRemoteViewsFactory(private val context: Context) : RemoteViewsServ
         
         val prefs = context.getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE)
         val selectedCalendars = prefs.getStringSet(Constants.PREF_SELECTED_CALENDARS, null)
-        val shouldFilter = selectedCalendars != null
+        
+        // Filter ONLY if the set exists AND is not empty.
+        // If null (first run) or empty (user deselected all?), show everything as fallback.
+        val shouldFilter = selectedCalendars != null && selectedCalendars.isNotEmpty()
 
         val projection = arrayOf(
             CalendarContract.Instances.EVENT_ID,

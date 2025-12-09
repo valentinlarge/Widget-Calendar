@@ -38,7 +38,9 @@ data class SingleEvent(val id: Long, val title: String, val begin: Long)
 private fun getNextEvent(context: Context): SingleEvent? {
     val prefs = context.getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE)
     val selectedCalendars = prefs.getStringSet(Constants.PREF_SELECTED_CALENDARS, null)
-    val shouldFilter = selectedCalendars != null
+    
+    // Filter ONLY if the set exists AND is not empty.
+    val shouldFilter = selectedCalendars != null && selectedCalendars.isNotEmpty()
 
     val projection = arrayOf(
         CalendarContract.Instances.EVENT_ID,
